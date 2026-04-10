@@ -4,20 +4,26 @@ import time
 import random
 
 cola = queue.Queue()
-TOTAL_IMAGENES = 10
 
 def receptor():
-    for i in range(TOTAL_IMAGENES):
+    for i in range(12):
         imagen = f"imagen_{i+1}"
         cola.put(imagen)
         print(f"Recibida: {imagen}")
-        time.sleep(random.uniform(0.2, 1.2))  # llegada a veces rápida, a veces lenta
+        time.sleep(random.uniform(0.2, 1.2))  # llegada variable:a veces lento,a veces más rápido
+
+    cola.put(None)  # señal de fin
 
 def procesador():
-    for _ in range(TOTAL_IMAGENES):
-        imagen = cola.get()   # si no hay imágenes, espera
+    while True:
+        imagen = cola.get()
+
+        if imagen is None:   # no quedan más imágenes
+            cola.task_done()
+            break
+
         print(f"Procesando: {imagen}")
-        time.sleep(random.uniform(0.3, 1.5))  # procesamiento a veces rápido, a veces lento
+        time.sleep(random.uniform(0.3, 1.5))  # procesamiento variable: a veces más lento  a veces más rápido
         print(f"Procesada: {imagen}")
         cola.task_done()
 
@@ -29,5 +35,6 @@ consumidor.start()
 
 productor.join()
 cola.join()
+consumidor.join()
 
 print("Sistema terminado.")
