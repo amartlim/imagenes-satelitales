@@ -1,2 +1,2 @@
 # imagenes satelitales
-
+Este programa (productor-consumidor) utiliza dos hilos: uno recibe las imágenes y las introduce en una cola compartida FIFO, y otro las extrae y las procesa en orden de llegada.Si se quieren modificar los datos de la simulación, pueden cambiarse directamente en el código el número de imágenes a generar (en el bucle for i in range(12)) y los tiempos de llegada y procesamiento (en las instrucciones time.sleep(random.uniform(...))). El programa no requiere librerías externas, solo Python 3.Módulos usados: threading, queue, time, random.
